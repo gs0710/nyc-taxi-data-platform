@@ -1,0 +1,29 @@
+# Secrets
+.env
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Data (never commit real data, only samples)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Tool artifacts
+dbt/target/
+dbt/dbt_packages/
+dbt/logs/
+airflow/logs/
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
