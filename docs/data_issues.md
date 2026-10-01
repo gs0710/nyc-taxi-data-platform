@@ -23,3 +23,10 @@ Type 0: 84,822. Type 4: 37,405. Type 2: 13,802. Type 3: 8,075. Type 1: 14.
 
 ## Open question
 Where do the NULL-passenger rows come from (vendor / payment type)? See `explore_phase2c.py`.
+
+## Answer: source of the NULL passenger_count rows
+All 540,149 rows have `payment_type = 0` (VendorID 2: 451,456; VendorID 1: 88,204;
+VendorID 6: 489). The same payment type also holds the most negative fares (84,822).
+This is a distinct trip category, not random missing data. Decision: keep these rows
+and add a flag column in the cleaning step, rather than dropping them.
+(Meaning of payment_type 0 to be confirmed against the TLC data dictionary.)
