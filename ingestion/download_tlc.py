@@ -105,6 +105,10 @@ def ingest(url: str, dest: Path, validate, dataset: str, force: bool) -> None:
         tmp.replace(dest)  # atomic: the final name only ever points at a validated file
     except Exception:
         tmp.unlink(missing_ok=True)
+        try:
+            dest.parent.rmdir()  # remove the month folder if it is now empty
+        except OSError:
+            pass  # folder is not empty or already gone, so leave it
         raise
 
     write_metadata({
