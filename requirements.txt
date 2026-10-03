@@ -4,3 +4,4 @@ ruff
 pandas
 pyarrow
 duckdb
+requests
