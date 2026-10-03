@@ -13,5 +13,17 @@ services:
       - minio_data:/data
     restart: unless-stopped
 
+  spark:
+    build: ./docker/spark
+    image: taxi-spark:local
+    working_dir: /app
+    mem_limit: 4g
+    environment:
+      HOME: /tmp
+    volumes:
+      - ./spark:/app/spark
+      - ./data:/app/data
+    profiles: ["spark"]
+
 volumes:
   minio_data:
