@@ -6,7 +6,7 @@ RUN apt-get update \
 
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 
-RUN pip install --no-cache-dir "pyspark>=4.0,<5" pyarrow pandas
+RUN pip install --no-cache-dir "pyspark==4.2.0" pyarrow "pandas<3"
 
 # Run as a normal user (uid 1000 = your host user) so files we write
 # into ./data belong to you, not to root. A real passwd entry is also
