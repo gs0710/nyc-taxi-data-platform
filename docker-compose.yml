@@ -22,6 +22,7 @@ services:
       HOME: /tmp
     volumes:
       - ./spark:/app/spark
+      - ./tests:/app/tests
       - ./data:/app/data
     profiles: ["spark"]
 
