@@ -58,6 +58,7 @@ services:
       DATA_DIR: /app/data
     volumes:
       - ./warehouse:/app/warehouse
+      - ./tests:/app/tests
       - ./data:/app/data:ro
     depends_on:
       postgres:
