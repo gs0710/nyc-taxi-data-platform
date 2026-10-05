@@ -45,6 +45,25 @@ services:
       retries: 10
     restart: unless-stopped
 
+  loader:
+    build: ./docker/loader
+    image: taxi-loader:local
+    working_dir: /app
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      DATA_DIR: /app/data
+    volumes:
+      - ./warehouse:/app/warehouse
+      - ./data:/app/data:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: ["tools"]
+
 volumes:
   minio_data:
   pg_data:
