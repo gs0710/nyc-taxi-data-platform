@@ -8,3 +8,9 @@ test-paths: ["tests"]
 macro-paths: ["macros"]
 target-path: "target"
 clean-targets: ["target", "dbt_packages"]
+
+models:
+  taxi_dw:
+    staging:
+      +materialized: view
+      +schema: staging
