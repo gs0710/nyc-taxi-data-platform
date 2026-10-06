@@ -21,7 +21,7 @@ SQL_FILE = Path(__file__).resolve().parents[2] / "warehouse" / "init" / "02_tabl
 def staging_table_columns():
     """Column names of staging.yellow_trips, read from the CREATE TABLE statement."""
     text = SQL_FILE.read_text()
-    body = re.search(r"CREATE TABLE IF NOT EXISTS staging\.yellow_trips \((.*?)\n\);", text, re.S).group(1)
+    body = re.search(r"CREATE TABLE IF NOT EXISTS staging\.yellow_trips \((.*?)\n\);", text, re.DOTALL).group(1)
     return [
         line.split()[0]
         for line in body.splitlines()
