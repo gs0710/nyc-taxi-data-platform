@@ -65,6 +65,24 @@ services:
         condition: service_healthy
     profiles: ["tools"]
 
+  dbt:
+    build: ./docker/dbt
+    image: taxi-dbt:local
+    working_dir: /dbt
+    environment:
+      DBT_PROFILES_DIR: /dbt
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./dbt:/dbt
+    depends_on:
+      postgres:
+        condition: service_healthy
+    profiles: ["tools"]
+
 volumes:
   minio_data:
   pg_data:
