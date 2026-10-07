@@ -1,0 +1,18 @@
+version: 2
+
+models:
+  - name: stg_yellow_trips
+    description: >
+      Thin view over staging.yellow_trips. It adds pickup_date and pickup_hour
+      and stores no data of its own.
+    columns:
+      - name: pickup_datetime
+        description: Pickup time, local New York time (no time zone).
+      - name: dropoff_datetime
+        description: Dropoff time, local New York time (no time zone).
+      - name: passenger_count_missing
+        description: True when the source had no passenger count (payment_type 0 trips).
+      - name: zero_distance
+        description: True when the recorded trip distance is exactly 0.
+      - name: total_amount
+        description: Total charged to the passenger, in US dollars.
