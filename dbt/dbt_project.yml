@@ -4,6 +4,7 @@ config-version: 2
 profile: taxi_dw
 
 model-paths: ["models"]
+seed-paths: ["seeds"]
 test-paths: ["tests"]
 macro-paths: ["macros"]
 target-path: "target"
@@ -14,3 +15,20 @@ models:
     staging:
       +materialized: view
       +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts
+
+seeds:
+  taxi_dw:
+    +schema: staging
+    taxi_zone_lookup:
+      +column_types:
+        location_id: integer
+        borough: text
+        zone: text
+        service_zone: text
+    payment_type_codes:
+      +column_types:
+        payment_type: integer
+        payment_type_name: text
