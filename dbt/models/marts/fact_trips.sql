@@ -1,0 +1,27 @@
+-- Grain: one row per clean taxi trip. Labels live in the dim_* tables.
+select
+    to_char(pickup_date, 'YYYYMMDD')::int  as pickup_date_key,
+    pickup_hour,
+    pickup_datetime,
+    dropoff_datetime,
+    pickup_location_id                     as pickup_zone_key,
+    dropoff_location_id                    as dropoff_zone_key,
+    payment_type                           as payment_type_key,
+    vendor_id,
+    rate_code_id,
+    passenger_count,
+    passenger_count_missing,
+    zero_distance,
+    trip_distance,
+    trip_duration_minutes,
+    fare_amount,
+    extra,
+    mta_tax,
+    tip_amount,
+    tolls_amount,
+    improvement_surcharge,
+    congestion_surcharge,
+    airport_fee,
+    cbd_congestion_fee,
+    total_amount
+from {{ ref('stg_yellow_trips') }}
