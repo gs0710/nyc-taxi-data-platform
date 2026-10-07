@@ -27,3 +27,4 @@ derby.log
 .vscode/
 .idea/
 .DS_Store
+dbt/.user.yml

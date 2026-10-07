@@ -1,0 +1,16 @@
+version: 2
+
+sources:
+  - name: staging
+    schema: staging
+    description: Cleaned trips loaded from Parquet by warehouse/load_staging.py
+    tables:
+      - name: yellow_trips
+        description: One row per clean yellow taxi trip. Bad rows were rejected or quarantined by Spark.
+        columns:
+          - name: pickup_datetime
+            data_tests:
+              - not_null
+          - name: dropoff_datetime
+            data_tests:
+              - not_null

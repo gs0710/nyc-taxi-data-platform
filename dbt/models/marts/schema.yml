@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: dim_zone
+    description: One row per TLC taxi zone.
+    columns:
+      - name: zone_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_payment_type
+    description: One row per payment type code.
+    columns:
+      - name: payment_type_key
+        data_tests:
+          - unique
+          - not_null
+
+  - name: dim_date
+    description: Calendar from 2024-01-01 to 2026-12-31.
+    columns:
+      - name: date_key
+        data_tests:
+          - unique
+          - not_null
+      - name: full_date
+        data_tests:
+          - unique
+          - not_null
