@@ -4,7 +4,7 @@ The lake upload runs in parallel with the cleaning. Trigger with
 {"month": "YYYY-MM"} (default 2025-01). Every task is safe to re-run.
 """
 import os
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
 from airflow.providers.docker.operators.docker import DockerOperator
 from airflow.providers.standard.operators.bash import BashOperator
@@ -35,7 +35,7 @@ def bind(sub, target, read_only=False):
 
 with DAG(
     dag_id="taxi_pipeline",
-    start_date=datetime(2025, 1, 1),
+    start_date=datetime(2025, 1, 1, tzinfo=UTC),
     schedule=None,
     catchup=False,
     max_active_runs=1,
