@@ -28,3 +28,4 @@ derby.log
 .idea/
 .DS_Store
 dbt/.user.yml
+airflow/config/airflow.cfg
