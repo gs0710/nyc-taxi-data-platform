@@ -1,5 +1,5 @@
 """Smoke test: proves Airflow runs a task and can start a Docker container."""
-from datetime import datetime
+from datetime import UTC, datetime
 
 from airflow.providers.docker.operators.docker import DockerOperator
 from airflow.providers.standard.operators.bash import BashOperator
@@ -7,7 +7,7 @@ from airflow.sdk import DAG
 
 with DAG(
     dag_id="smoke_test",
-    start_date=datetime(2025, 1, 1),
+    start_date=datetime(2025, 1, 1, tzinfo=UTC),
     schedule=None,
     catchup=False,
     tags=["test"],
