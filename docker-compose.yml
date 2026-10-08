@@ -31,6 +31,7 @@ x-airflow-common: &airflow-common
     - ./airflow/config:/opt/airflow/config
     - ./airflow/plugins:/opt/airflow/plugins
     - ./ingestion:/opt/airflow/project/ingestion:ro
+    - ./quality:/opt/airflow/project/quality:ro
     - ./data:/opt/airflow/project/data
     - /var/run/docker.sock:/var/run/docker.sock
   profiles: ["airflow"]
