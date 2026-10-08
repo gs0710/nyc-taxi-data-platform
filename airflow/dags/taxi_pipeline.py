@@ -68,6 +68,17 @@ with DAG(
         **DOCKER,
     )
 
+    quality_gate = BashOperator(
+        task_id="quality_gate",
+        bash_command=(
+            "python /opt/airflow/project/quality/check_run.py "
+            f"--month {MONTH} "
+            "--runs-dir /opt/airflow/project/data/processed/_runs "
+            "--out-dir /opt/airflow/project/data/processed/_quality"
+        ),
+        retries=0,  # bad data will not fix itself, so do not retry
+    )
+
     load_staging = DockerOperator(
         task_id="load_staging",
         image="taxi-loader:local",
@@ -91,4 +102,4 @@ with DAG(
     )
 
     download_raw >> [spark_clean, upload_to_lake]
-    spark_clean >> load_staging >> dbt_build
+    spark_clean >> quality_gate >> load_staging >> dbt_build
