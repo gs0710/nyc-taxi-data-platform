@@ -1,3 +1,5 @@
+name: nyc-taxi-data-platform
+
 x-airflow-common: &airflow-common
   build: ./docker/airflow
   image: taxi-airflow:local
