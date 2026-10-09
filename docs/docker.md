@@ -14,6 +14,14 @@ make pipeline MONTH=2025-01    # runs download -> Spark -> quality gate -> load 
 
 The Airflow login is `airflow` and the password is `AIRFLOW_ADMIN_PASSWORD` in your `.env`.
 
+## Re-running bootstrap
+
+`make bootstrap` never overwrites a value that is already set. If a secret is missing but a Docker
+volume from an earlier run exists, it stops with an error, because a new password would not match the
+one stored in that volume. Put the original value in `.env`, or run `FORCE=1 ./scripts/bootstrap.sh` if
+you accept resetting the password. For Postgres, reset it afterwards with
+`ALTER ROLE <user> PASSWORD '<new value>';` using `docker compose exec postgres psql`.
+
 ## Services
 
 | Service | Image | Profile | Port | Purpose |
