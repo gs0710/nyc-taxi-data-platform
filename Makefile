@@ -39,4 +39,7 @@ down: ## Stop everything (your data is kept)
 > docker compose --profile airflow --profile spark --profile tools stop
 > docker compose stop
 
-.PHONY: help bootstrap core airflow stop-airflow pipeline dbt test lint ps down
+build: ## Build the local images (Spark, loader, dbt, Airflow)
+> docker compose --profile spark --profile tools --profile airflow build spark loader dbt airflow-init
+
+.PHONY: help build bootstrap core airflow stop-airflow pipeline dbt test lint ps down
