@@ -51,3 +51,9 @@ API server about 270 MiB, DAG processor about 190 MiB. Check your own numbers wi
 - **Fixed container names** (`taxi-postgres`, `taxi-minio`) mean only one copy of the stack can run.
 - **MinIO:** upstream stopped publishing free images, so a community fork is used.
 - The Airflow setup is a learning setup (LocalExecutor, no workers), not a production one.
+- **Project name is fixed** (`name:` in `docker-compose.yml`) because the DAG uses the network name
+  `nyc-taxi-data-platform_default`. A second clone on the same machine would reuse the same containers
+  and volumes, so run only one copy of the stack per Docker host.
+- **Not tested:** a first-ever start of the whole stack on an empty machine. The pieces were tested
+  separately: the Postgres init scripts in a throwaway container, `bootstrap.sh` on a temporary file, and
+  `docker compose config` plus lint and unit tests on a fresh clone.
