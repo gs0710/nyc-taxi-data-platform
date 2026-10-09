@@ -33,6 +33,24 @@ fill_if_unset() {  # fill_if_unset KEY VALUE
   fi
 }
 
+guard_volume() {  # guard_volume KEY VOLUME: refuse to replace a password that a data volume already uses
+  local current
+  current="$(get "$1")"
+  [ -z "$current" ] || [[ "$current" == change_me* ]] || return 0
+  command -v docker >/dev/null 2>&1 || return 0
+  docker volume inspect "$2" >/dev/null 2>&1 || return 0
+  [ "${FORCE:-0}" = "1" ] && return 0
+  echo "ERROR: $1 is not set in $ENV_FILE, but the Docker volume '$2' already exists." >&2
+  echo "       A new random password would not match the one stored in that volume." >&2
+  echo "       Put the original value in $ENV_FILE, or run FORCE=1 ./scripts/bootstrap.sh to reset" >&2
+  echo "       it on purpose (see docs/docker.md)." >&2
+  exit 1
+}
+
+guard_volume POSTGRES_PASSWORD nyc-taxi-data-platform_pg_data
+guard_volume AIRFLOW_DB_PASSWORD nyc-taxi-data-platform_pg_data
+guard_volume MINIO_ROOT_PASSWORD nyc-taxi-data-platform_minio_data
+
 for key in POSTGRES_PASSWORD MINIO_ROOT_PASSWORD AIRFLOW_DB_PASSWORD AIRFLOW_ADMIN_PASSWORD; do
   fill_if_unset "$key" "$(openssl rand -hex 16)"
 done
