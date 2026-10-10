@@ -59,7 +59,10 @@ jobs:
         run: docker compose --profile spark --profile tools --profile airflow build dbt
 
       - name: Validate dbt project
-        run: docker compose run --rm dbt dbt parse
+        run: |
+          mkdir -p dbt/logs dbt/target
+          chmod -R a+rwX dbt
+          docker compose run --rm dbt dbt --debug parse
 
   dag-import:
     runs-on: ubuntu-latest
