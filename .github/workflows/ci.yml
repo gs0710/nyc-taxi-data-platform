@@ -60,3 +60,29 @@ jobs:
 
       - name: Validate dbt project
         run: docker compose run --rm dbt dbt parse
+
+  dag-import:
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    env:
+      HOST_PROJECT_DIR: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env with random secrets
+        run: ./scripts/bootstrap.sh
+
+      - name: Build Airflow image
+        run: docker compose --profile airflow build airflow-init
+
+      - name: Check that all DAGs import
+        run: |
+          docker compose --profile airflow run --rm --no-deps --entrypoint "" \
+            -e AIRFLOW__CORE__LOAD_EXAMPLES=False airflow-scheduler \
+            python -c "
+          from airflow.dag_processing.dagbag import DagBag
+          bag = DagBag(dag_folder='/opt/airflow/dags')
+          print('DAGs found:', sorted(bag.dag_ids))
+          print('Import errors:', bag.import_errors)
+          raise SystemExit(1 if bag.import_errors else 0)
+          "
