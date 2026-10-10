@@ -24,3 +24,24 @@ jobs:
 
       - name: Unit tests
         run: pytest -q
+
+  container-tests:
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env with random secrets
+        run: ./scripts/bootstrap.sh
+
+      - name: Build Spark and loader images
+        run: docker compose --profile spark --profile tools build spark loader
+
+      - name: Start Postgres
+        run: docker compose up -d --wait postgres
+
+      - name: Spark tests
+        run: docker compose run --rm spark python -m pytest tests/spark -q -p no:cacheprovider
+
+      - name: Warehouse tests
+        run: docker compose run --rm loader python -m pytest tests/warehouse -q -p no:cacheprovider
