@@ -1,5 +1,7 @@
 # NYC Taxi Data Platform
 
+[![CI](https://github.com/gs0710/nyc-taxi-data-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/gs0710/nyc-taxi-data-platform/actions/workflows/ci.yml)
+
 An end-to-end batch data engineering project: NYC TLC taxi trips plus Open-Meteo
 weather, processed with PySpark, modeled with dbt into a Postgres star schema,
 orchestrated by Airflow, and visualized in Metabase.
