@@ -45,3 +45,18 @@ jobs:
 
       - name: Warehouse tests
         run: docker compose run --rm loader python -m pytest tests/warehouse -q -p no:cacheprovider
+
+  dbt-parse:
+    runs-on: ubuntu-latest
+    needs: lint-and-test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create .env with random secrets
+        run: ./scripts/bootstrap.sh
+
+      - name: Build dbt image
+        run: docker compose --profile spark --profile tools --profile airflow build dbt
+
+      - name: Validate dbt project
+        run: docker compose run --rm dbt dbt parse
