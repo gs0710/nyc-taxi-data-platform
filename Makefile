@@ -42,4 +42,7 @@ down: ## Stop everything (your data is kept)
 build: ## Build the local images (Spark, loader, dbt, Airflow)
 > docker compose --profile spark --profile tools --profile airflow build spark loader dbt airflow-init
 
-.PHONY: help build bootstrap core airflow stop-airflow pipeline dbt test lint ps down
+dashboard: core ## Build the static HTML dashboard into dashboards/index.html
+> docker compose run --rm -v "$(CURDIR)/dashboards:/app/dashboards" loader python dashboards/build_dashboard.py
+
+.PHONY: help build bootstrap core airflow stop-airflow pipeline dbt test lint ps down dashboard
