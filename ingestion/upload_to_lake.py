@@ -14,13 +14,20 @@ load_dotenv()
 
 DATA_DIR = Path(os.getenv("DATA_DIR", "./data"))
 ENDPOINT = os.getenv("MINIO_ENDPOINT", "http://localhost:9000")
-BUCKET = os.getenv("LAKE_BUCKET", "taxi-lake")
+BACKEND = os.getenv("LAKE_BACKEND", "minio").lower()  # "minio" (local) or "s3" (AWS)
+if BACKEND == "s3":
+    BUCKET = os.getenv("S3_BUCKET", "")
+else:
+    BUCKET = os.getenv("LAKE_BUCKET", "taxi-lake")
 NOT_FOUND = {"404", "NoSuchKey", "NoSuchBucket", "NotFound"}
 
 log = logging.getLogger("lake")
 
 
 def get_client():
+    if BACKEND == "s3":
+        # AWS: boto3 reads AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY from the environment
+        return boto3.client("s3", region_name=os.environ["AWS_REGION"])
     return boto3.client(
         "s3",
         endpoint_url=ENDPOINT,
@@ -35,8 +42,8 @@ def ensure_bucket(s3, bucket: str) -> None:
     try:
         s3.head_bucket(Bucket=bucket)
     except ClientError as exc:
-        if exc.response["Error"]["Code"] not in NOT_FOUND:
-            raise
+        if exc.response["Error"]["Code"] not in NOT_FOUND or BACKEND == "s3":
+            raise  # never create AWS buckets from code
         s3.create_bucket(Bucket=bucket)
         log.info("Created bucket %s", bucket)
 
@@ -99,6 +106,10 @@ def main() -> int:
         level=os.getenv("LOG_LEVEL", "INFO"),
         format="%(asctime)s %(levelname)s %(name)s: %(message)s",
     )
+
+    if BACKEND not in {"minio", "s3"} or not BUCKET:
+        log.error("Set LAKE_BACKEND to minio or s3 (and S3_BUCKET when using s3)")
+        return 2
 
     try:
         s3 = get_client()
