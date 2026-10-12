@@ -27,6 +27,11 @@ x-airflow-common: &airflow-common
     MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     MINIO_ENDPOINT: http://minio:9000
     LAKE_BUCKET: taxi-lake
+    LAKE_BACKEND: ${LAKE_BACKEND:-minio}
+    S3_BUCKET: ${S3_BUCKET:-}
+    AWS_REGION: ${AWS_REGION:-us-east-1}
+    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
   volumes:
     - ./airflow/dags:/opt/airflow/dags
     - ./airflow/logs:/opt/airflow/logs
